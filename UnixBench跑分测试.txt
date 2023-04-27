@@ -1,0 +1,17 @@
+1、配置环境
+sudo apt install -y make gcc git
+
+2、UnixBench获取
+git clone https://github.com/kdlucas/byte-unixbench.git
+
+3、UnixBench编译
+#切换目录
+cd byte-unixbench/UnixBench
+
+#编译
+make
+
+#运行程序
+sudo ./Run
+
+程序运行可能需要两个小时，请耐心等待
