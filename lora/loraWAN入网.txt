@@ -1,0 +1,50 @@
+LoRa终端两种不同的入网方式，在LoRaWAN协议中，它们分别称为OTAA和ABP。OTAA的全称是Over The Air Activation，中文意思就是空中激活方式；ABP的全称就是Activation By Personalization，中文意思是个性化激活。
+
+OTAA的终端入网流程相对比较复杂，而ABP终端简化了入网流程，从安全性上来说OTAA终端的安全性相比于ABP终端要高一些。
+
+对于不同入网方式的终端来说，通电并不代表节点已经入网了，终端要正常工作，必须要获取到三个加密参数，这三个加密参数分别是：DevAddr、NwkSkey和AppSkey；而OTAA终端配置的是另外三个参数，这三个参数分别是：DevEUI、AppEUI和AppKey。
+
+OTAA终端需要向服务器发送JoinRequest请求，也就是入网请求，服务器处理完入网请求会向终端发送JoinAccept，也就是入网应答，终端成功接收到服务器下发的JoinAccept之后，OTAA终端这时才是入网成功了，此时OTAA终端就可以从JoinAccept中计算出DevAddr、NwkSkey和AppSkey这三个加密参数了。有了这三个加密参数，终端就可以正常工作了。
+
+对于ABP终端来说我们是直接三个加密参数DevAddr、NwkSkey和AppSkey配置给了ABP终端，ABP终端可以直接使用这三个加密参数来工作。当ABP终端成功发送了第一条数据之后，我们就认为ABP终端入网成功了。
+
+我们了解了OTAA终端和ABP终端的入网方式之后，下面来说说为什么OTAA终端相比于ABP终端安全性更高一些。
+
+从前面的介绍我们了解到OTAA终端需要执行一次入网过程之后，才能获取到对应的三个加密参数DevAddr、NwkSkey和AppSkey；OTAA终端每执行一次入网操作，这三个加密参数也会相应的随机变化。
+
+ABP终端是直接配置了三个加密参数DevAddr、NwkSkey和AppSkey，也就是说对于ABP终端这三个加密参数是永远不会改变的。对于OTAA终端我们可以根据需要在适当的时候重新执行入网操作，动态更改加密参数，这就像我们的银行卡密码一样，定期修改银行卡密码可以提高我们银行卡的安全性，所以OTAA设备相对来说比ABP设备安全性更高一些。
+
+ABP模式：
+
+	AT+JOIN_MODE=ABP
+
+	AT+DEVADDR=26:34:f8:3d
+	AT+DEVADDR=?
+
+	AT+APPSKEY=23:59:b4:04:4b:14:7d:08:4c:4f:7e:01:23:07:8d:d2
+	AT+APPSKEY=?
+
+	AT+NWKSKEY=22:04:8b:0f:47:76:b8:8a:88:a2:8d:3e:f3:da:63:26
+	AT+NWKSKEY=?
+
+	AT+SEND_HEX=1,1234		/* ABP模式无需入网流程，因此当ABP终端成功发送了第一条数据之后，我们就认为ABP终端入网成功了 */
+	AT+SEND_CHEX=1,1,123456
+
+OTAA模式：
+	AT+JOIN_MODE=OTAA
+
+	AT+DEVEUI=ad:56:92:76:10:13:5a:9c
+	AT+DEVEUI=?
+
+	AT+APPEUI=8f:5b:b2:f6:7f:41:55:98
+	AT+APPEUI=?
+
+	AT+APPKEY=50:95:ad:b1:28:fc:63:b1:1b:3b:0d:9d:30:5b:27:2f
+	AT+APPKEY=?
+
+	AT+JOINING
+
+	AT+SEND_HEX=1,1234
+	AT+SEND_CHEX=1,1,123456
+
+
