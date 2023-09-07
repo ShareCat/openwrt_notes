@@ -6,5 +6,6 @@ uci set network.wan.proto=static
 uci set network.wan.ipaddr=192.168.0.2
 uci set network.wan.netmask=255.255.255.0
 uci set network.wan.gateway=192.168.0.1
+uci set network.wan.dns=114.114.114.114
 
 
